@@ -18,26 +18,57 @@ var cards = [{
 
 var cardsInPlay = [];
 
+//on first 2 cards played, this checks for a match
 function checkForMatch(){
 	if (cardsInPlay[0] === cardsInPlay[1]){
-		console.log("You found a match!")
+		alert("You found a match!");
 	} else {
-		console.log("sorry, try again.")
+		alert("sorry, try again.");
+		
 	}
 }
 
-function flipCard(cardId){
-	console.log("user flipped " + cards[cardId].rank)
+
+function checkIfWon(){
+	if (cardsInPlay[2] === cardsInPlay[3]){
+		alert("You Won!!");
+	} else {
+		alert("sorry, you lost this match. Click \"RESET GAME\" to try again");
+	}
+}
+
+function flipCard(){
+	var cardId = this.getAttribute('data-id');
+	this.setAttribute('src', cards[cardId].cardImage);
 	cardsInPlay.push(cards[cardId].rank);
-	console.log(cards[cardId].suit);
-	console.log(cards[cardId].cardImage);
+	
 	if(cardsInPlay.length === 2) {
-	checkForMatch();
+
+	setTimeout(checkForMatch, 1000);
 }
 
+	if(cardsInPlay.length === 4) {
+
+	setTimeout(checkIfWon, 1000);
+} 
+
 }
 
-flipCard(0);
+function createBoard(){
+	for (var i = 0 ;i < cards.length; i++){
+		var cardElement = document.createElement('img');
+		cardElement.setAttribute("src", "images/back.png");
+		cardElement.setAttribute('data-id', i);
+		cardElement.addEventListener('click',flipCard);
+		document.getElementById('game-board').appendChild(cardElement)
+	}
+}
 
-flipCard(1);
+function reload(){
+	location.reload(true);
+}
 
+createBoard();
+
+var button = document.querySelector('button')
+button.addEventListener('click',reload)
